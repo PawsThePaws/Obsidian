@@ -4676,11 +4676,62 @@ function Library:CreateWindow(WindowInfo)
         })
 
         if WindowInfo.Icon then
-            New("ImageLabel", {
-                Image = tonumber(WindowInfo.Icon) and "rbxassetid://" .. WindowInfo.Icon or WindowInfo.Icon,
+            local Icon = New("ImageLabel", {
+                Image = tonumber(WindowInfo.Icon) and "rbxassetid://74080484918102",
                 Size = WindowInfo.IconSize,
                 Parent = TitleHolder,
             })
+            local function AnimateGif(ImageLabel, Width, Height, Rows, Columns, NumberOfFrames, ImageID, FPS)
+        if ImageID then ImageLabel.Image = ImageID end
+        local RobloxMaxImageSize = 2048
+        local RealWidth, RealHeight
+
+        if math.max(Width, Height) > RobloxMaxImageSize then
+            local Longest = Width > Height and "Width" or "Height"
+            if Longest == "Width" then
+                RealWidth = RobloxMaxImageSize
+                RealHeight = (RealWidth / Width) * Height
+            elseif Longest == "Height" then
+                RealHeight = RobloxMaxImageSize
+                RealWidth = (RealHeight / Height) * Width
+            end
+        else
+            RealWidth, RealHeight = Width, Height
+        end
+
+        local FrameSize = Vector2.new(RealWidth / Columns, RealHeight / Rows)
+        ImageLabel.ImageRectSize = FrameSize
+
+        local CurrentRow, CurrentColumn = 0, 0
+        local Offsets = {}
+
+        for i = 1, NumberOfFrames do
+            local CurrentX = CurrentColumn * FrameSize.X
+            local CurrentY = CurrentRow * FrameSize.Y
+            table.insert(Offsets, Vector2.new(CurrentX, CurrentY))
+            CurrentColumn += 1
+
+            if CurrentColumn >= Columns then
+                CurrentColumn = 0
+                CurrentRow += 1
+            end
+        end
+
+        local TimeInterval = FPS and 1 / FPS or 0.1
+        local Index = 0
+
+        task.spawn(function()
+            while task.wait(TimeInterval) and ImageLabel:IsDescendantOf(game) do
+                Index += 1
+                ImageLabel.ImageRectOffset = Offsets[Index]
+                if Index >= NumberOfFrames then
+                    Index = 0
+                end
+            end
+        end)
+    end
+
+  AnimateGif(Icon, 60, 40, 2, 3, 5, "rbxassetid://74080484918102", 10)
         end
 
         local X = Library:GetTextBounds(
