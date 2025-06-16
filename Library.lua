@@ -2,7 +2,7 @@ local cloneref = (cloneref or clonereference or function(instance: any)
     return instance
 end)
 
-getgenv().UserInterfaceIsVisible
+getgenv().UserInterfaceIsVisible = true
 
 local CoreGui: CoreGui = cloneref(game:GetService("CoreGui"))
 local Players: Players = cloneref(game:GetService("Players"))
