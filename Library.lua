@@ -5737,6 +5737,8 @@ function Library:CreateWindow(WindowInfo)
 
         MainFrame.Visible = Library.Toggled
         ModalElement.Modal = Library.Toggled
+        
+        getgenv().UserInterfaceIsVisible = Library.Toggled
 
         if Library.Toggled and not Library.IsMobile then
             local OldMouseIconEnabled = UserInputService.MouseIconEnabled
