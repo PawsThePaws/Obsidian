@@ -2,8 +2,6 @@ local cloneref = (cloneref or clonereference or function(instance: any)
     return instance
 end)
 
-getgenv().UserInterfaceIsVisible = true
-
 local CoreGui: CoreGui = cloneref(game:GetService("CoreGui"))
 local Players: Players = cloneref(game:GetService("Players"))
 local RunService: RunService = cloneref(game:GetService("RunService"))
@@ -16,6 +14,9 @@ local TweenService: TweenService = cloneref(game:GetService("TweenService"))
 local getgenv = getgenv or function()
     return shared
 end
+
+getgenv().UserInterfaceIsVisible = true
+
 local setclipboard = setclipboard or nil
 local protectgui = protectgui or (syn and syn.protect_gui) or function() end
 local gethui = gethui or function()
